@@ -1,33 +1,63 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs, Redirect } from 'expo-router';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../src/redux/store';
+import { Ionicons } from '@expo/vector-icons';
+import { logoutUser } from '../../src/redux/user/user.actions';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+export default function TabsLayout() {
+  const { isLoggedIn } = useSelector((s: RootState) => s.user);
+  const dispatch = useDispatch();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // 🔐 Auth guard
+  if (!isLoggedIn) {
+    return <Redirect href="/login" />;
+  }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+        headerStyle: { backgroundColor: '#ff6347' },
+        headerTintColor: '#fff',
+        tabBarActiveTintColor: '#ff6347',
+        tabBarInactiveTintColor: '#555',
+        headerRight: () => (
+          <Ionicons
+            name="log-out-outline"
+            size={24}
+            color="#fff"
+            style={{ marginRight: 15 }}
+            onPress={() => dispatch(logoutUser())}
+          />
+        ),
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Menu',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="restaurant-outline" size={size} color={color} />
+          ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="cart"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Cart',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cart-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
