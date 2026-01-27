@@ -8,45 +8,115 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../src/redux/user/user.actions';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const dispatch = useDispatch();
 
-  const handleRegister = () => {
-    const nameRegex = /^[A-Za-z\s]+$/;
-    if (!name || !nameRegex.test(name)) {
-      Alert.alert('Invalid Name', 'Name should contain only letters.');
-      return;
-    }
+  /* ---------------- VALIDATIONS ---------------- */
 
-    if (!/^\d{10}$/.test(phone)) {
-      Alert.alert('Invalid Phone', 'Phone must be 10 digits.');
-      return;
-    }
+  const nameError =
+    name && !/^[A-Za-z\s]+$/.test(name)
+      ? 'Name should contain only letters'
+      : '';
 
-    if (!email.includes('@')) {
-      Alert.alert('Invalid Email', 'Enter a valid email.');
-      return;
-    }
+  const phoneError =
+    phone && !/^\d{10}$/.test(phone)
+      ? 'Phone number must be 10 digits'
+      : '';
 
-    // Save to redux (Profile tab will read this)
-    dispatch(
-      loginUser({
-        name,
-        phone,
-        email,
-      })
+  const emailError =
+    email && !/^\S+@\S+\.\S+$/.test(email)
+      ? 'Enter a valid email address'
+      : '';
+
+  const addressError =
+    address && address.length < 5
+      ? 'Address is too short'
+      : '';
+
+  const passwordError =
+    password && password.length < 4
+      ? 'Password must be at least 4 characters'
+      : '';
+
+  const confirmPasswordError =
+    confirmPassword && password !== confirmPassword
+      ? 'Passwords do not match'
+      : '';
+
+  const isFormValid = useMemo(() => {
+    return (
+      name &&
+      phone &&
+      email &&
+      address &&
+      password &&
+      confirmPassword &&
+      !nameError &&
+      !phoneError &&
+      !emailError &&
+      !addressError &&
+      !passwordError &&
+      !confirmPasswordError
     );
+  }, [
+    name,
+    phone,
+    email,
+    address,
+    password,
+    confirmPassword,
+    nameError,
+    phoneError,
+    emailError,
+    addressError,
+    passwordError,
+    confirmPasswordError,
+  ]);
 
-    router.replace('about');
+  /* ---------------- REGISTER ---------------- */
+
+  const handleRegister = async () => {
+    try {
+      const userData = { name, phone, email, address, password };
+
+      await AsyncStorage.setItem('user', JSON.stringify(userData));
+
+      dispatch(
+        loginUser({
+          ...userData,
+          isLoggedIn: true,
+        })
+      );
+
+      Alert.alert(
+        'Registration Successful 🎉',
+        'Your account has been created successfully.',
+        [
+          {
+            text: 'Continue',
+            onPress: () => router.replace('/about'),
+          },
+        ]
+      );
+    } catch {
+      Alert.alert('Error', 'Failed to register. Please try again.');
+    }
   };
+
+  /* ---------------- UI ---------------- */
 
   return (
     <KeyboardAvoidingView
@@ -55,35 +125,92 @@ export default function RegisterScreen() {
     >
       <Text style={styles.heading}>Create Account</Text>
 
+      {/* NAME */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, nameError && styles.inputError]}
         placeholder="Name"
         value={name}
         onChangeText={setName}
+        autoCapitalize="words"
       />
+      {!!nameError && <Text style={styles.error}>{nameError}</Text>}
 
+      {/* PHONE */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, phoneError && styles.inputError]}
         placeholder="Phone"
         value={phone}
         onChangeText={setPhone}
         keyboardType="number-pad"
         maxLength={10}
       />
+      {!!phoneError && <Text style={styles.error}>{phoneError}</Text>}
 
+      {/* EMAIL */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, emailError && styles.inputError]}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
+      {!!emailError && <Text style={styles.error}>{emailError}</Text>}
 
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+      {/* ADDRESS */}
+      <TextInput
+        style={[styles.input, addressError && styles.inputError]}
+        placeholder="Address"
+        value={address}
+        onChangeText={setAddress}
+      />
+      {!!addressError && <Text style={styles.error}>{addressError}</Text>}
+
+      {/* PASSWORD */}
+      <TextInput
+        style={[styles.input, passwordError && styles.inputError]}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      {!!passwordError && <Text style={styles.error}>{passwordError}</Text>}
+
+      {/* CONFIRM PASSWORD */}
+      <TextInput
+        style={[styles.input, confirmPasswordError && styles.inputError]}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      {!!confirmPasswordError && (
+        <Text style={styles.error}>{confirmPasswordError}</Text>
+      )}
+
+      {/* REGISTER BUTTON */}
+      <TouchableOpacity
+        style={[
+          styles.button,
+          !isFormValid && styles.buttonDisabled,
+        ]}
+        disabled={!isFormValid}
+        onPress={handleRegister}
+      >
         <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => router.push('/login')}>
+        <Text style={styles.registerText}>
+          Already have an account?{' '}
+          <Text style={styles.registerLink}>Login</Text>
+        </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
+
+/* ---------------- STYLES ---------------- */
 
 const styles = StyleSheet.create({
   container: {
@@ -101,21 +228,43 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ff6347',
+    borderColor: '#ddd',
     borderRadius: 10,
     padding: 14,
-    marginVertical: 8,
+    marginTop: 10,
+    fontSize: 16,
+  },
+  inputError: {
+    borderColor: '#ff4d4f',
+  },
+  error: {
+    fontSize: 12,
+    color: '#ff4d4f',
+    marginTop: 4,
+    marginLeft: 4,
   },
   button: {
     backgroundColor: '#ff6347',
     padding: 15,
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 25,
+  },
+  buttonDisabled: {
+    backgroundColor: '#f4b3a6',
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  registerText: {
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#555',
+  },
+  registerLink: {
+    color: '#ff6347',
     fontWeight: 'bold',
   },
 });

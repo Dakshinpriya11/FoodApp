@@ -1,60 +1,118 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { memo, useCallback, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { addItem, removeItem } from '../redux/cart/cart.actions';
 import { RootState } from '../redux/store';
 import { FoodItem } from '../data/items';
 
 type Props = {
-  item: FoodItem;
+  item: FoodItem & {
+    is_available?: boolean; // 🔹 coming from backend
+  };
 };
 
-export default function FoodCard({ item }: Props) {
+function FoodCard({ item }: Props) {
   const dispatch = useDispatch();
 
-  // ✅ FIX: access cart items safely
-  const quantity =
-    useSelector(
-      (state: RootState) => state.cart.items[item.id]?.quantity || 0
-    );
+  const quantity = useSelector(
+    (state: RootState) => state.cart.items[item.id]?.quantity || 0,
+    shallowEqual
+  );
+
+  const isAvailable = item.is_available !== false;
+
+  const isMinusDisabled = useMemo(
+    () => quantity === 0 || !isAvailable,
+    [quantity, isAvailable]
+  );
+
+  const isPlusDisabled = useMemo(
+    () => !isAvailable,
+    [isAvailable]
+  );
+
+  const handleAdd = useCallback(() => {
+    if (!isAvailable) return;
+    dispatch(addItem(item));
+  }, [dispatch, item, isAvailable]);
+
+  const handleRemove = useCallback(() => {
+    dispatch(removeItem(item.id));
+  }, [dispatch, item.id]);
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.price}>₹{item.price}</Text>
+    <View style={[styles.card, !isAvailable && styles.disabledCard]}>
+      {/* LEFT */}
+      <View style={styles.info}>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.price}>₹{item.price}</Text>
 
-      <View style={styles.controls}>
-        <TouchableOpacity
-          style={[styles.btn, quantity === 0 && styles.disabled]}
-          disabled={quantity === 0}
-          onPress={() => dispatch(removeItem(item.id))}
-        >
-          <Text style={styles.btnText}>−</Text>
-        </TouchableOpacity>
+        {!isAvailable && (
+          <Text style={styles.unavailable}>Unavailable</Text>
+        )}
 
-        <Text style={styles.qty}>{quantity}</Text>
+        <View style={styles.controls}>
+          <TouchableOpacity
+            style={[styles.btn, isMinusDisabled && styles.disabledBtn]}
+            disabled={isMinusDisabled}
+            onPress={handleRemove}
+          >
+            <Text style={styles.btnText}>−</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => dispatch(addItem(item))}
-        >
-          <Text style={styles.btnText}>+</Text>
-        </TouchableOpacity>
+          <Text style={styles.qty}>{quantity}</Text>
+
+          <TouchableOpacity
+            style={[styles.btn, isPlusDisabled && styles.disabledBtn]}
+            disabled={isPlusDisabled}
+            onPress={handleAdd}
+          >
+            <Text style={styles.btnText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* RIGHT */}
+      <Image source={item.image} style={styles.image} />
     </View>
   );
 }
 
-/* ✅ styles stay EXACTLY the same */
+export default memo(FoodCard);
+
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
-    padding: 15,
-    margin: 10,
-    borderRadius: 10,
-    elevation: 5,
+    marginHorizontal: 12,
+    marginVertical: 8,
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 12,
+    elevation: 4,
   },
-  name: { fontSize: 18, fontWeight: 'bold' },
-  price: { marginVertical: 5, color: '#555' },
+  disabledCard: {
+    opacity: 0.5,
+  },
+  info: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  name: {
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  price: {
+    marginTop: 4,
+    color: '#666',
+    fontSize: 15,
+  },
+  unavailable: {
+    marginTop: 6,
+    color: '#d32f2f',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   controls: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -62,15 +120,29 @@ const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: '#ff6347',
-    width: 35,
-    height: 35,
-    borderRadius: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  disabled: {
+  disabledBtn: {
     backgroundColor: '#ccc',
   },
-  btnText: { color: '#fff', fontSize: 20 },
-  qty: { marginHorizontal: 15, fontSize: 16 },
+  btnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  qty: {
+    marginHorizontal: 12,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  image: {
+    width: 90,
+    height: 90,
+    borderRadius: 10,
+    marginLeft: 10,
+  },
 });
