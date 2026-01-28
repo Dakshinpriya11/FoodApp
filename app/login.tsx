@@ -10,20 +10,21 @@ import {
 } from 'react-native';
 import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../src/redux/user/user.actions';
 import { router } from 'expo-router';
-import { getUser } from '../src/utils/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { login as loginApi } from '../src/api/auth.api';
+import { loginUser } from '../src/redux/user/user.actions';
 
 export default function LoginScreen() {
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
   /* ---------------- VALIDATIONS ---------------- */
-
-  const phoneError =
-    phone && !/^\d{10}$/.test(phone)
-      ? 'Phone number must be 10 digits'
+  const emailError =
+    email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+      ? 'Enter a valid email'
       : '';
 
   const passwordError =
@@ -32,44 +33,47 @@ export default function LoginScreen() {
       : '';
 
   const isFormValid = useMemo(() => {
-    return phone && password && !phoneError && !passwordError;
-  }, [phone, password, phoneError, passwordError]);
+    return email && password && !emailError && !passwordError;
+  }, [email, password, emailError, passwordError]);
 
   /* ---------------- LOGIN ---------------- */
-
   const handleLogin = async () => {
-    const storedUser = await getUser();
+    try {
+      const data = await loginApi({ email, password });
 
-    if (!storedUser) {
-      Alert.alert('No Account Found', 'Please register first.');
-      return;
+      // 🔐 Save JWT
+      await AsyncStorage.setItem('token', data.token);
+
+      // 🔁 Save user to redux
+      dispatch(
+        loginUser({
+          name: data.name,
+          email,
+          role: data.role,
+          token: data.token,
+          isLoggedIn: true,
+        })
+      );
+
+      // ✅ Role-based navigation
+      if (data.role === 'CUSTOMER') {
+        router.replace('/(tabs)');
+      } else if (data.role === 'STAFF') {
+        router.replace('/staff');
+      } else if (data.role === 'OWNER') {
+        router.replace('/owner');
+      }
+
+      Alert.alert('Welcome', 'Login successful');
+    } catch (err: any) {
+      Alert.alert(
+        'Login Failed',
+        err?.response?.data?.message || 'Invalid email or password'
+      );
     }
-
-    if (storedUser.phone !== phone || storedUser.password !== password) {
-      Alert.alert('Login Failed', 'Phone or password is incorrect.');
-      return;
-    }
-
-    dispatch(
-      loginUser({
-        name: storedUser.name,
-        phone: storedUser.phone,
-        email: storedUser.email,
-        address: storedUser.address,
-        isLoggedIn: true,
-      })
-    );
-
-    Alert.alert('Welcome 🎉', 'Login successful', [
-      {
-        text: 'Continue',
-        onPress: () => router.replace('/about'),
-      },
-    ]);
   };
 
   /* ---------------- UI ---------------- */
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -77,16 +81,16 @@ export default function LoginScreen() {
     >
       <Text style={styles.heading}>Welcome Back!</Text>
 
-      {/* PHONE */}
-      <Text style={styles.label}>Phone Number</Text>
+      {/* EMAIL */}
+      <Text style={styles.label}>Email</Text>
       <TextInput
-        style={[styles.input, phoneError && styles.inputError]}
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="number-pad"
-        maxLength={10}
+        style={[styles.input, emailError && styles.inputError]}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      {!!phoneError && <Text style={styles.error}>{phoneError}</Text>}
+      {!!emailError && <Text style={styles.error}>{emailError}</Text>}
 
       {/* PASSWORD */}
       <Text style={styles.label}>Password</Text>
@@ -100,28 +104,17 @@ export default function LoginScreen() {
 
       {/* LOGIN BUTTON */}
       <TouchableOpacity
-        style={[
-          styles.button,
-          !isFormValid && styles.buttonDisabled,
-        ]}
+        style={[styles.button, !isFormValid && styles.buttonDisabled]}
         disabled={!isFormValid}
         onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.push('/register')}>
-        <Text style={styles.registerText}>
-          Don’t have an account?{' '}
-          <Text style={styles.registerLink}>Register</Text>
-        </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
 
 /* ---------------- STYLES ---------------- */
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -174,14 +167,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-  },
-  registerText: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#555',
-  },
-  registerLink: {
-    color: '#ff6347',
-    fontWeight: 'bold',
   },
 });

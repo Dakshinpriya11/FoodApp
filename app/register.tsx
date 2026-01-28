@@ -102,7 +102,7 @@ export default function RegisterScreen() {
       );
 
       Alert.alert(
-        'Registration Successful 🎉',
+        'Registration Successful',
         'Your account has been created successfully.',
         [
           {

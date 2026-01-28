@@ -1,6 +1,7 @@
 import { FlatList, ActivityIndicator, View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import FoodCard from '../../src/components/FoodCard';
+import { fetchCustomerMenu } from '../../src/api/menu.api';
 
 type MenuItem = {
   id: number;
@@ -22,16 +23,10 @@ export default function Home() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        'http://10.0.2.2:3000/api/menus/customer/menu?orderType=DELIVERY'
-      );
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch menu');
-      }
-
-      const data = await res.json();
+      // ✅ USE API LAYER
+      const data = await fetchCustomerMenu('DINE_IN');
       setMenu(data);
+
     } catch (err) {
       console.error(err);
       setError('Unable to load menu');

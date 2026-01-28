@@ -13,9 +13,7 @@ type RemoveItemAction = {
 };
 
 function* handleAddItem(action: AddItemAction) {
-  // future: API call, analytics, logging, etc
-  // example:
-  // yield call(api.logAddToCart, action.payload)
+  // API call
 }
 
 function* handleRemoveItem(action: RemoveItemAction) {

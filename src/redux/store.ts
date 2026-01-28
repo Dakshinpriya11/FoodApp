@@ -8,7 +8,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
   cart: cartReducer,
-  user: userReducer,  // ✅ added
+  user: userReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
