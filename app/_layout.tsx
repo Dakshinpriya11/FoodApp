@@ -12,8 +12,9 @@ export default function RootLayout() {
           headerTintColor: '#ffffff',
         }}
       >
-        {/* LOGIN */}
-        <Stack.Screen name="login" options={{ headerShown: false }} />
+        {/* AUTH SCREENS */}
+        <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
 
         {/* STATIC SCREENS */}
         <Stack.Screen name="about" options={{ headerShown: false }} />

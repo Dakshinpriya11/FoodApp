@@ -56,7 +56,7 @@ export default function LoginScreen() {
       );
 
       // Role-based navigation
-      if (data.role === 'CUSTOMER') router.replace('/(tabs)');
+      if (data.role === 'CUSTOMER') router.replace('/about');
       else if (data.role === 'STAFF') router.replace('/(staff)/dashboard');
       else if (data.role === 'OWNER') router.replace('/(owner)/dashboard');
 
@@ -104,7 +104,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => router.push('/register')}
+        onPress={() => router.push('(auth)/register')}
         style={{ marginTop: 15 }}
       >
         <Text style={styles.registerText}>

@@ -7,8 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabsLayout() {
   const { isLoggedIn } = useSelector((s: RootState) => s.user);
 
-  // 🔐 Auth guard
-  if (!isLoggedIn) return <Redirect href="/login" />;
+  //  Auth guard
+  if (!isLoggedIn) return <Redirect href="(auth)/login" />;
 
   return (
     <Tabs

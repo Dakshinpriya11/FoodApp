@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../src/redux/user/user.actions';
+import { loginUser } from '../redux/user/user.actions';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles } from '../styles/RegisterScreen.styles';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -25,7 +26,6 @@ export default function RegisterScreen() {
   const dispatch = useDispatch();
 
   /* ---------------- VALIDATIONS ---------------- */
-
   const nameError =
     name && !/^[A-Za-z\s]+$/.test(name)
       ? 'Name should contain only letters'
@@ -87,7 +87,6 @@ export default function RegisterScreen() {
   ]);
 
   /* ---------------- REGISTER ---------------- */
-
   const handleRegister = async () => {
     try {
       const userData = { name, phone, email, address, password };
@@ -117,7 +116,6 @@ export default function RegisterScreen() {
   };
 
   /* ---------------- UI ---------------- */
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -125,7 +123,6 @@ export default function RegisterScreen() {
     >
       <Text style={styles.heading}>Create Account</Text>
 
-      {/* NAME */}
       <TextInput
         style={[styles.input, nameError && styles.inputError]}
         placeholder="Name"
@@ -135,7 +132,6 @@ export default function RegisterScreen() {
       />
       {!!nameError && <Text style={styles.error}>{nameError}</Text>}
 
-      {/* PHONE */}
       <TextInput
         style={[styles.input, phoneError && styles.inputError]}
         placeholder="Phone"
@@ -146,7 +142,6 @@ export default function RegisterScreen() {
       />
       {!!phoneError && <Text style={styles.error}>{phoneError}</Text>}
 
-      {/* EMAIL */}
       <TextInput
         style={[styles.input, emailError && styles.inputError]}
         placeholder="Email"
@@ -157,7 +152,6 @@ export default function RegisterScreen() {
       />
       {!!emailError && <Text style={styles.error}>{emailError}</Text>}
 
-      {/* ADDRESS */}
       <TextInput
         style={[styles.input, addressError && styles.inputError]}
         placeholder="Address"
@@ -166,7 +160,6 @@ export default function RegisterScreen() {
       />
       {!!addressError && <Text style={styles.error}>{addressError}</Text>}
 
-      {/* PASSWORD */}
       <TextInput
         style={[styles.input, passwordError && styles.inputError]}
         placeholder="Password"
@@ -176,7 +169,6 @@ export default function RegisterScreen() {
       />
       {!!passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
-      {/* CONFIRM PASSWORD */}
       <TextInput
         style={[styles.input, confirmPasswordError && styles.inputError]}
         placeholder="Confirm Password"
@@ -184,87 +176,21 @@ export default function RegisterScreen() {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      {!!confirmPasswordError && (
-        <Text style={styles.error}>{confirmPasswordError}</Text>
-      )}
+      {!!confirmPasswordError && <Text style={styles.error}>{confirmPasswordError}</Text>}
 
-      {/* REGISTER BUTTON */}
       <TouchableOpacity
-        style={[
-          styles.button,
-          !isFormValid && styles.buttonDisabled,
-        ]}
+        style={[styles.button, !isFormValid && styles.buttonDisabled]}
         disabled={!isFormValid}
         onPress={handleRegister}
       >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push('/login')}>
+      <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
         <Text style={styles.registerText}>
-          Already have an account?{' '}
-          <Text style={styles.registerLink}>Login</Text>
+          Already have an account? <Text style={styles.registerLink}>Login</Text>
         </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
-
-/* ---------------- STYLES ---------------- */
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  heading: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 25,
-    textAlign: 'center',
-    color: '#ff6347',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    padding: 14,
-    marginTop: 10,
-    fontSize: 16,
-  },
-  inputError: {
-    borderColor: '#ff4d4f',
-  },
-  error: {
-    fontSize: 12,
-    color: '#ff4d4f',
-    marginTop: 4,
-    marginLeft: 4,
-  },
-  button: {
-    backgroundColor: '#ff6347',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 25,
-  },
-  buttonDisabled: {
-    backgroundColor: '#f4b3a6',
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  registerText: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#555',
-  },
-  registerLink: {
-    color: '#ff6347',
-    fontWeight: 'bold',
-  },
-});
