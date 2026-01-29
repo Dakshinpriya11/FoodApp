@@ -7,4 +7,8 @@ export const Colors = {
   error: '#ff4d4f',          // red
   disabled: '#f4b3a6',       // light red / grey for disabled buttons
   white: '#ffffff',           // white text
+  secondary: '#eee', // light grey for secondary buttons
+  textQuaternary: '#555',
+  borderLight: '#ddd',
+  overlayPrimary: '#ff6347', // optional if you want rgba variants later
 };

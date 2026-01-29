@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from '../theme/colors';
 import { layoutStyles } from './common/layout.styles';
-import { textStyles } from './common/text.styles';
+import { FontSizes, FontWeights } from '../theme/typography';
+import { BorderRadius } from '../theme/border';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ export const styles = StyleSheet.create({
 
   heading: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: FontWeights.bold,
     marginBottom: 15,
     marginTop: 15,
     marginHorizontal: 15,
@@ -19,13 +20,13 @@ export const styles = StyleSheet.create({
   },
 
   listContent: {
-      paddingTop: 10,
-      paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
 
   total: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: FontWeights.bold,
     marginVertical: 20,
     textAlign: 'center',
     color: Colors.textPrimary,
@@ -34,11 +35,11 @@ export const styles = StyleSheet.create({
   checkoutButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: BorderRadius.medium,
     textAlign: 'center',
-    color: '#fff',
+    color: Colors.white,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: FontWeights.bold,
     marginHorizontal: 50,
   },
 });

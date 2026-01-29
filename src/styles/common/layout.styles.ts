@@ -1,11 +1,12 @@
 // src/styles/common/layout.styles.ts
 import { StyleSheet } from 'react-native';
+import { Colors } from '../../theme/colors';// import Colors
 
 export const layoutStyles = StyleSheet.create({
   // Full screen container with default background
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.background, // replaced '#fff' with common color
   },
 
   // Center content both vertically and horizontally

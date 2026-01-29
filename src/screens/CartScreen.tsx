@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useCallback, useMemo } from 'react';
 import { RootState } from '../redux/store';
@@ -14,8 +14,12 @@ export default function CartScreen() {
   const total = useMemo(() => getCartTotal(items), [items]);
 
   const handleCheckout = useCallback(() => {
+    if (items.length === 0) {
+      Alert.alert('Cart Empty', 'Please add at least one item to checkout.');
+      return;
+    }
     navigateToOrder();
-  }, []);
+  }, [items]);
 
   const renderItem = useCallback(
     ({ item }: any) => <CartItemRow item={item} />,

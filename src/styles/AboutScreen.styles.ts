@@ -2,9 +2,11 @@ import { StyleSheet } from 'react-native';
 import { layoutStyles } from './common/layout.styles';
 import { buttonStyles } from './common/button.styles';
 import { textStyles } from './common/text.styles';
+import { Colors } from '../theme/colors';
+import { BorderRadius } from '../theme/border';
+import { FontSizes } from '../theme/typography';
 
 export const styles = StyleSheet.create({
-  // Screen-specific
   bg: {
     flex: 1,
   },
@@ -12,49 +14,46 @@ export const styles = StyleSheet.create({
   overlay: {
     ...layoutStyles.centered,
     padding: 20,
-    backgroundColor: 'rgba(255, 99, 71, 0.4)',
+    backgroundColor: 'rgba(255, 99, 71, 0.4)', // no exact match in Colors
   },
 
-  // Text (reuse common + override color)
   welcome: {
     ...textStyles.heading,
-    color: '#fff',
+    color: Colors.white,
     marginBottom: 10,
   },
 
   info: {
     ...textStyles.subtitle,
-    color: '#fff',
+    color: Colors.white,
     marginBottom: 30,
     textAlign: 'center',
   },
 
-  // Button wrapper (white button)
   button: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     paddingVertical: 15,
     paddingHorizontal: 50,
-    borderRadius: 10,
+    borderRadius: BorderRadius.medium,
   },
 
   buttonText: {
     ...buttonStyles.textPrimary,
-    color: '#ff6347',
+    color: Colors.primary,
   },
 
-  // Logout button (screen-specific)
   logout: {
     position: 'absolute',
     top: 50,
     right: 20,
-    backgroundColor: '#ff6347',
+    backgroundColor: Colors.primary,
     paddingHorizontal: 15,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 8, // consider adding small/medium/large in BorderRadius if needed
   },
 
   logoutText: {
     ...buttonStyles.textPrimary,
-    fontSize: 14,
+    fontSize: 14, // consider adding small: 14 to FontSizes
   },
 });

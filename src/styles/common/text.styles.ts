@@ -1,27 +1,29 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '../../theme/colors';
+import { FontSizes, FontWeights } from '../../theme/typography';
 
 export const textStyles = StyleSheet.create({
   heading: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#ff6347',
+    fontSize: FontSizes.heading,
+    fontWeight: FontWeights.bold,
+    color: Colors.primary,
     textAlign: 'center',
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 22, // consider adding to FontSizes
+    fontWeight: FontWeights.semiBold,
+    color: Colors.textPrimary,
   },
 
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: FontSizes.body,
+    color: '#666', // consider adding to Colors
   },
 
   link: {
-    fontSize: 16,
-    color: '#ff6347',
-    fontWeight: '600',
+    fontSize: FontSizes.body,
+    color: Colors.primary,
+    fontWeight: FontWeights.semiBold,
   },
 });

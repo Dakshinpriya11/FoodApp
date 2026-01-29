@@ -1,11 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '../../theme/colors';
+import { FontSizes, FontWeights } from '../../theme/typography';
+import { BorderRadius } from '../../theme/border';
 
 export const buttonStyles = StyleSheet.create({
   primary: {
-    backgroundColor: '#ff6347',
+    backgroundColor: Colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 40,
-    borderRadius: 10,
+    borderRadius: BorderRadius.medium,
     alignItems: 'center',
     justifyContent: 'center',
 
@@ -20,22 +23,23 @@ export const buttonStyles = StyleSheet.create({
   },
 
   secondary: {
-    backgroundColor: '#eee',
+    backgroundColor: Colors.secondary,
     paddingVertical: 14,
     paddingHorizontal: 40,
-    borderRadius: 10,
+    borderRadius: BorderRadius.medium,
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   textPrimary: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: Colors.white,
+    fontSize: FontSizes.body + 2, // 18 equivalent
+    fontWeight: FontWeights.bold,
   },
 
   textSecondary: {
-    color: '#333',
-    fontSize: 16,
-    fontWeight: '600',
+    color: Colors.textPrimary,
+    fontSize: FontSizes.body, // 16
+    fontWeight: FontWeights.semiBold,
   },
 });

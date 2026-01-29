@@ -1,28 +1,31 @@
 import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { layoutStyles } from './common/layout.styles';
+import { Colors } from '../theme/colors';
+import { FontSizes, FontWeights } from '../theme/typography';
+import { BorderRadius } from '../theme/border';
 
 export const styles = StyleSheet.create({
   container: {
     ...layoutStyles.screenContainer,
-    flex: 1, // ensure the container takes full screen
-    justifyContent: 'center', // vertically center content
+    flex: 1,
+    justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight || 20 : 0, // avoid overlap with status bar
-    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight || 20 : 0,
+    backgroundColor: Colors.background,
   },
 
   heading: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: FontSizes.heading,
+    fontWeight: FontWeights.bold,
     marginBottom: 30,
-    color: '#ff6347',
+    color: Colors.primary,
     textAlign: 'center',
   },
 
   label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#444',
+    fontSize: FontSizes.small,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.textSecondary,
     marginBottom: 4,
     marginTop: 12,
   },
@@ -30,50 +33,50 @@ export const styles = StyleSheet.create({
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
+    borderColor: Colors.border,
+    borderRadius: BorderRadius.medium,
     padding: 15,
-    fontSize: 16,
+    fontSize: FontSizes.body,
   },
 
   inputError: {
-    borderColor: '#ff4d4f',
+    borderColor: Colors.error,
   },
 
   error: {
-    fontSize: 12,
-    color: '#ff4d4f',
+    fontSize: FontSizes.small,
+    color: Colors.error,
     marginTop: 4,
     marginLeft: 4,
   },
 
   button: {
-    backgroundColor: '#ff6347',
+    backgroundColor: Colors.primary,
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: BorderRadius.medium,
     marginTop: 30,
   },
 
   buttonDisabled: {
-    backgroundColor: '#f4b3a6',
+    backgroundColor: Colors.disabled,
   },
 
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
+    color: Colors.white,
+    fontWeight: FontWeights.bold,
+    fontSize: FontSizes.button,
     textAlign: 'center',
   },
 
   registerText: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: FontSizes.small,
+    color: Colors.textQuaternary,
     textAlign: 'center',
     marginTop: 20,
   },
 
   registerLink: {
-    color: '#ff6347',
-    fontWeight: 'bold',
+    color: Colors.primary,
+    fontWeight: FontWeights.bold,
   },
 });
