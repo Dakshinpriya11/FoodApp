@@ -1,15 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '../theme/colors';
+import { layoutStyles } from './common/layout.styles';
 
 export const styles = StyleSheet.create({
   loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    ...layoutStyles.centered,
   },
   errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centered,
   },
   listContent: {
     paddingBottom: 20,

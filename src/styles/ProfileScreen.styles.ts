@@ -1,55 +1,60 @@
 import { StyleSheet } from 'react-native';
+import { layoutStyles } from './common/layout.styles';
+import { buttonStyles } from './common/button.styles';
+import { textStyles } from './common/text.styles';
 import { Colors } from '../theme/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    ...layoutStyles.screenContainer,
+    backgroundColor: Colors.background,
     padding: 20,
-    backgroundColor: Colors.background, // white or theme color
   },
   heading: {
+    ...textStyles.heading,
     fontSize: 26,
-    fontWeight: 'bold',
     marginBottom: 25,
     textAlign: 'center',
-    color: Colors.primary, // tomato / #ff6347
+    color: Colors.primary,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.textSecondary, // dark grey
+    ...textStyles.label,
+    color: Colors.textSecondary,
     marginTop: 12,
     marginBottom: 4,
   },
   input: {
-    borderWidth: 1,
-    borderColor: Colors.border, // light grey
+    ...textStyles.input,
+    borderWidth: 1, // ✅ add borderWidth
+    borderColor: Colors.border, // ✅ add borderColor
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
     color: Colors.textPrimary,
   },
   inputError: {
-    borderColor: Colors.error, // red
+    borderColor: Colors.error,
   },
   error: {
-    fontSize: 12,
+    ...textStyles.error,
     color: Colors.error,
     marginTop: 4,
     marginLeft: 4,
   },
   button: {
-    backgroundColor: Colors.primary, // red / tomato
+    ...buttonStyles.primary,
     padding: 15,
-    borderRadius: 10,
     marginTop: 30,
-    alignItems: 'center', // ensure the text is centered
+    alignItems: 'center',
+    backgroundColor: Colors.primary,
   },
   buttonDisabled: {
-    backgroundColor: Colors.disabled, // light red / grey
+    ...buttonStyles.disabled,
+    backgroundColor: Colors.disabled,
   },
   buttonText: {
-    color: Colors.white, // white text
+    ...textStyles.buttonText,
+    color: Colors.white,
     fontSize: 18,
     fontWeight: 'bold',
   },
