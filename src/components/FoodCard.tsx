@@ -5,6 +5,9 @@ import { addItem, removeItem } from '../redux/cart/cart.actions';
 import { RootState } from '../redux/store';
 import { FoodItem } from '../data/items';
 
+// Import the static image
+const burgerImage = require('../assets/burger.png');
+
 type Props = {
   item: FoodItem & {
     is_available?: boolean; // 🔹 coming from backend
@@ -73,7 +76,7 @@ function FoodCard({ item }: Props) {
       </View>
 
       {/* RIGHT */}
-      <Image source={item.image} style={styles.image} />
+      <Image source={burgerImage} style={styles.image} />
     </View>
   );
 }
@@ -144,5 +147,6 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 10,
     marginLeft: 10,
+    resizeMode: 'cover',
   },
 });
