@@ -1,7 +1,9 @@
 // Validation helper functions
 export const validateName = (name: string) => {
   if (!name) return '';
-  return /^[A-Za-z\s]+$/.test(name) ? '' : 'Only letters allowed';
+  return /^[A-Za-z0-9\s]+$/.test(name)
+    ? ''
+    : 'Only letters and numbers allowed';
 };
 
 export const validatePhone = (phone: string) => {

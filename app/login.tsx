@@ -41,10 +41,10 @@ export default function LoginScreen() {
     try {
       const data = await loginApi({ email, password });
 
-      // 🔐 Save JWT
+      // Save JWT
       await AsyncStorage.setItem('token', data.token);
 
-      // 🔁 Save user to redux
+      // Save user to redux
       dispatch(
         loginUser({
           name: data.name,
@@ -59,9 +59,9 @@ export default function LoginScreen() {
       if (data.role === 'CUSTOMER') {
         router.replace('/(tabs)');
       } else if (data.role === 'STAFF') {
-        router.replace('/staff');
+        router.replace('/(staff)/dashboard');
       } else if (data.role === 'OWNER') {
-        router.replace('/owner');
+        router.replace('/(owner)/dashboard');
       }
 
       Alert.alert('Welcome', 'Login successful');
@@ -109,6 +109,16 @@ export default function LoginScreen() {
         onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+
+      {/* REGISTER LINK */}
+      <TouchableOpacity
+        onPress={() => router.push('/register')}
+        style={{ marginTop: 15 }}
+      >
+        <Text style={styles.registerText}>
+          Don't have an account? <Text style={styles.registerLink}>Register</Text>
+        </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -167,5 +177,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
+  },
+  registerText: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+  },
+  registerLink: {
+    color: '#ff6347',
+    fontWeight: 'bold',
   },
 });
