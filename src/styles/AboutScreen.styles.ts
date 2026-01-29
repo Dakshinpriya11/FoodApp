@@ -1,38 +1,48 @@
 import { StyleSheet } from 'react-native';
+import { layoutStyles } from './common/layout.styles';
+import { buttonStyles } from './common/button.styles';
+import { textStyles } from './common/text.styles';
 
 export const styles = StyleSheet.create({
-  bg: { flex: 1 },
-  overlay: {
+  // Screen-specific
+  bg: {
     flex: 1,
-    backgroundColor: 'rgba(255, 99, 71, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
   },
+
+  overlay: {
+    ...layoutStyles.centered,
+    padding: 20,
+    backgroundColor: 'rgba(255, 99, 71, 0.4)',
+  },
+
+  // Text (reuse common + override color)
   welcome: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    ...textStyles.heading,
     color: '#fff',
     marginBottom: 10,
-    textAlign: 'center',
   },
+
   info: {
-    fontSize: 18,
+    ...textStyles.subtitle,
     color: '#fff',
     marginBottom: 30,
     textAlign: 'center',
   },
+
+  // Button wrapper (white button)
   button: {
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 50,
     borderRadius: 10,
   },
+
   buttonText: {
+    ...buttonStyles.textPrimary,
     color: '#ff6347',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
+
+  // Logout button (screen-specific)
   logout: {
     position: 'absolute',
     top: 50,
@@ -42,8 +52,9 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
   },
+
   logoutText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    ...buttonStyles.textPrimary,
+    fontSize: 14,
   },
 });

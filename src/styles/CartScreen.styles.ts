@@ -1,21 +1,28 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from '../theme/colors';
+import { layoutStyles } from './common/layout.styles';
+import { textStyles } from './common/text.styles';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    ...layoutStyles.screenPadding,
     backgroundColor: Colors.background,
   },
+
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15,
+    marginTop: 15,
+    marginHorizontal: 15,
     color: Colors.textPrimary,
   },
+
   listContent: {
-    paddingBottom: 20,
+      paddingTop: 10,
+      paddingBottom: 20,
   },
+
   total: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -23,6 +30,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.textPrimary,
   },
+
   checkoutButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 15,
