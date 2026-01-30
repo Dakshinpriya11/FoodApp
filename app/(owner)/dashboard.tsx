@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { router } from 'expo-router';
 import { Colors } from '@/src/theme/colors';
 import { styles } from '@/src/styles/OwnerDashboard.styles';
 
@@ -11,7 +11,11 @@ export default function OwnerDashboard() {
       <View style={styles.grid}>
 
         {/* Menu */}
-        <TouchableOpacity style={styles.card} activeOpacity={0.85}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.85}
+          onPress={() => router.push('/(owner)/menus')}
+        >
           <View style={styles.iconWrapper}>
             <Ionicons
               name="restaurant-outline"
@@ -22,6 +26,7 @@ export default function OwnerDashboard() {
           <Text style={styles.cardTitle}>Menu</Text>
           <Text style={styles.cardDesc}>Create • Edit • Delete</Text>
         </TouchableOpacity>
+
 
         {/* Items */}
         <TouchableOpacity style={styles.card} activeOpacity={0.85}>
