@@ -11,8 +11,3 @@ export const logoutUser = () => ({
   type: LOGOUT as const,
 });
 
-// // update password
-// export const updatePassword = (newPassword: string) => ({
-//   type: UPDATE_PASSWORD as const,
-//   payload: newPassword,
-// });
