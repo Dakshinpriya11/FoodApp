@@ -1,45 +1,107 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from '../theme/colors';
-import { layoutStyles } from './common/layout.styles';
 import { FontSizes, FontWeights } from '../theme/typography';
 import { BorderRadius } from '../theme/border';
+import { layoutStyles } from './common/layout.styles';
 
 export const styles = StyleSheet.create({
   container: {
-    ...layoutStyles.screenPadding,
+    flex: 1,
     backgroundColor: Colors.background,
   },
 
   heading: {
-    fontSize: 24,
+    fontSize: FontSizes.headingMedium,
     fontWeight: FontWeights.bold,
-    marginBottom: 15,
-    marginTop: 15,
-    marginHorizontal: 15,
     color: Colors.textPrimary,
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 8,
   },
 
   listContent: {
-    paddingTop: 10,
-    paddingBottom: 20,
+      paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 140, // space for bottom card
   },
 
-  total: {
-    fontSize: 20,
-    fontWeight: FontWeights.bold,
-    marginVertical: 20,
+  emptyList: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+
+  emptyState: {
+    alignItems: 'center',
+    padding: 20,
+  },
+
+  emptyTitle: {
+    fontSize: FontSizes.title,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.textPrimary,
+    marginBottom: 6,
+  },
+
+  emptySubtitle: {
+    fontSize: FontSizes.body,
+    color: Colors.textSecondary,
     textAlign: 'center',
+  },
+
+  bottomCard: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: Colors.white,
+    padding: 16,
+    borderTopLeftRadius: BorderRadius.large,
+    borderTopRightRadius: BorderRadius.large,
+
+    shadowColor: Colors.textPrimary,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: -4 },
+    elevation: 10,
+  },
+
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+
+  totalLabel: {
+    fontSize: FontSizes.body,
+    color: Colors.textSecondary,
+  },
+
+  totalAmount: {
+    fontSize: FontSizes.title,
+    fontWeight: FontWeights.bold,
     color: Colors.textPrimary,
   },
 
   checkoutButton: {
     backgroundColor: Colors.primary,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: BorderRadius.medium,
-    textAlign: 'center',
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeights.bold,
-    marginHorizontal: 50,
+    alignItems: 'center',
   },
+
+  checkoutDisabled: {
+    backgroundColor: Colors.disabled,
+  },
+
+  checkoutText: {
+    fontSize: FontSizes.button,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.white,
+  },
+totalText: {
+  fontSize: 18,
+  fontWeight: '600',
+  color: Colors.textPrimary,
+}
+
 });

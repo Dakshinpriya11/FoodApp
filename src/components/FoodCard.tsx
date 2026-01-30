@@ -10,7 +10,7 @@ const burgerImage = require('../assets/burger.png');
 
 type Props = {
   item: FoodItem & {
-    is_available?: boolean; // 🔹 coming from backend
+    is_available?: boolean; //  coming from backend
   };
 };
 
