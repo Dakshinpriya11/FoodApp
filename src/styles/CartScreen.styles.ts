@@ -98,4 +98,10 @@ export const styles = StyleSheet.create({
     fontWeight: FontWeights.semiBold,
     color: Colors.white,
   },
+totalText: {
+  fontSize: 18,
+  fontWeight: '600',
+  color: Colors.textPrimary,
+}
+
 });
