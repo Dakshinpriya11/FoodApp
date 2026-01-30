@@ -28,6 +28,8 @@ export default function CreateMenu() {
       Alert.alert('Success', 'Menu created successfully', [
         { text: 'OK', onPress: () => router.back() },
       ]);
+  console.log('Creating menu with payload:', { name, start_time: startTime, end_time: endTime });
+
       dispatch(resetCreateMenuState());
       setName('');
       setStartTime('');
