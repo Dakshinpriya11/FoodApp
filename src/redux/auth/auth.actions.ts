@@ -8,6 +8,7 @@ export const loginRequest = (payload: {
   email: string;
   password: string;
   onSuccess?: (role: string) => void;
+  onError?: (message: string) => void; // ✅ ADD THIS
 }) => ({
   type: LOGIN_REQUEST,
   payload,

@@ -1,122 +1,85 @@
-// //
-// // import { call, put, takeLatest } from 'redux-saga/effects';
-// // import { fetchCustomerMenu, OrderType } from '../../api/menu.api';
-// // import {
-// //   fetchMenuRequest,
-// //   fetchMenuSuccess,
-// //   fetchMenuFailure,
-// // } from './menu.slice';
-// //
-// // function* handleFetchMenu(action: ReturnType<typeof fetchMenuRequest> & { payload: OrderType }) {
-// //   try {
-// //     const data = yield call(fetchCustomerMenu, action.payload);
-// //     yield put(fetchMenuSuccess(data));
-// //   } catch (error: any) {
-// //     yield put(fetchMenuFailure(error?.message || 'Failed to fetch menu'));
-// //   }
-// // }
-// //
-// // export function* menuSaga() {
-// //   yield takeLatest(fetchMenuRequest.type, handleFetchMenu);
-// // }
-// import { call, put, takeLatest } from 'redux-saga/effects';
-// import {
-//   fetchCustomerMenu,
-//   OrderType,
-//   createMenu,
-//   CreateMenuPayload,
-// } from '../../api/menu.api';
-// import {
-//   fetchMenuRequest,
-//   fetchMenuSuccess,
-//   fetchMenuFailure,
-//   createMenuRequest,
-//   createMenuSuccess,
-//   createMenuFailure,
-// } from './menu.slice';
-//
-// // ===== Fetch Menu Saga =====
-// function* handleFetchMenu(action: ReturnType<typeof fetchMenuRequest> & { payload: OrderType }) {
-//   try {
-//     const data = yield call(fetchCustomerMenu, action.payload);
-//     yield put(fetchMenuSuccess(data));
-//   } catch (error: any) {
-//     yield put(fetchMenuFailure(error?.message || 'Failed to fetch menu'));
-//   }
-// }
-//
-// // ===== Create Menu Saga =====
-// function* handleCreateMenu(action: ReturnType<typeof createMenuRequest> & { payload: CreateMenuPayload }) {
-//   try {
-//     yield call(createMenu, action.payload);
-//     yield put(createMenuSuccess());
-//   } catch (error: any) {
-//     yield put(createMenuFailure(error?.message || 'Failed to create menu'));
-//   }
-// }
-//
-// // ===== Root Menu Saga =====
-// export function* menuSaga() {
-//   yield takeLatest(fetchMenuRequest.type, handleFetchMenu);
-//   yield takeLatest(createMenuRequest.type, handleCreateMenu);
-// }
-
 
 import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   fetchCustomerMenu,
-  OrderType,
+  fetchAllMenus,
   createMenu,
-  CreateMenuPayload,
   updateMenu,
-  UpdateMenuPayload,
+  deleteMenu,
+  OrderType,
 } from '../../api/menu.api';
 import {
   fetchMenuRequest,
   fetchMenuSuccess,
   fetchMenuFailure,
+  fetchAllMenusRequest,
+  fetchAllMenusSuccess,
+  fetchAllMenusFailure,
   createMenuRequest,
   createMenuSuccess,
   createMenuFailure,
   updateMenuRequest,
   updateMenuSuccess,
   updateMenuFailure,
+  deleteMenuRequest,
+  deleteMenuSuccess,
+  deleteMenuFailure,
 } from './menu.slice';
 
-// ===== Fetch Menu Saga =====
-function* handleFetchMenu(action: ReturnType<typeof fetchMenuRequest> & { payload: OrderType }) {
+/* CUSTOMER */
+function* handleFetchMenu(action: { payload: OrderType }) {
   try {
     const data = yield call(fetchCustomerMenu, action.payload);
     yield put(fetchMenuSuccess(data));
-  } catch (error: any) {
-    yield put(fetchMenuFailure(error?.message || 'Failed to fetch menu'));
+  } catch (e: any) {
+    yield put(fetchMenuFailure(e.message));
   }
 }
 
-// ===== Create Menu Saga =====
-function* handleCreateMenu(action: ReturnType<typeof createMenuRequest> & { payload: CreateMenuPayload }) {
+/* OWNER */
+function* handleFetchAllMenus() {
+  try {
+    const menus = yield call(fetchAllMenus);
+    yield put(fetchAllMenusSuccess(menus));
+  } catch (e: any) {
+    yield put(fetchAllMenusFailure(e.message));
+  }
+}
+
+function* handleCreateMenu(action: any) {
   try {
     yield call(createMenu, action.payload);
     yield put(createMenuSuccess());
-  } catch (error: any) {
-    yield put(createMenuFailure(error?.message || 'Failed to create menu'));
+    yield put(fetchAllMenusRequest());
+  } catch (e: any) {
+    yield put(createMenuFailure(e.message));
   }
 }
 
-// ===== Update Menu Saga =====
-function* handleUpdateMenu(action: ReturnType<typeof updateMenuRequest> & { payload: UpdateMenuPayload }) {
+function* handleUpdateMenu(action: any) {
   try {
     const { id, ...payload } = action.payload;
     yield call(updateMenu, id, payload);
     yield put(updateMenuSuccess());
-  } catch (error: any) {
-    yield put(updateMenuFailure(error?.message || 'Failed to update menu'));
+    yield put(fetchAllMenusRequest());
+  } catch (e: any) {
+    yield put(updateMenuFailure(e.message));
   }
 }
 
-// ===== Root Menu Saga =====
+function* handleDeleteMenu(action: any) {
+  try {
+    yield call(deleteMenu, action.payload);
+    yield put(deleteMenuSuccess(action.payload));
+  } catch (e: any) {
+    yield put(deleteMenuFailure(e.message));
+  }
+}
+
 export function* menuSaga() {
   yield takeLatest(fetchMenuRequest.type, handleFetchMenu);
+  yield takeLatest(fetchAllMenusRequest.type, handleFetchAllMenus);
   yield takeLatest(createMenuRequest.type, handleCreateMenu);
   yield takeLatest(updateMenuRequest.type, handleUpdateMenu);
+  yield takeLatest(deleteMenuRequest.type, handleDeleteMenu);
 }

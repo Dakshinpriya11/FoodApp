@@ -122,6 +122,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+   Alert,
 } from 'react-native';
 import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -151,19 +152,27 @@ export default function LoginScreen() {
   }, [email, password, emailError, passwordError]);
 
   /* ---------------- LOGIN (SAGA) ---------------- */
-  const handleLogin = () => {
-    dispatch(
-      loginRequest({
-        email,
-        password,
-        onSuccess: (role: string) => {
-          if (role === 'CUSTOMER') router.replace('/about');
-          else if (role === 'STAFF') router.replace('/(staff)/dashboard');
-          else if (role === 'OWNER') router.replace('/(owner)/dashboard');
-        },
-      })
-    );
-  };
+const handleLogin = () => {
+  dispatch(
+    loginRequest({
+      email,
+      password,
+      onSuccess: (role: string) => {
+        if (role === 'CUSTOMER') router.replace('/about');
+        else if (role === 'STAFF') router.replace('/(staff)/dashboard');
+        else if (role === 'OWNER') router.replace('/(owner)/dashboard');
+      },
+      onError: (message: string) => {
+        Alert.alert(
+          'Login Failed',
+          message || 'Invalid email or password'
+        );
+      },
+    })
+  );
+};
+
+
 
   return (
     <KeyboardAvoidingView

@@ -1,33 +1,4 @@
-// // src/api/menu.api.ts
-// import { apiClient } from './apiClient';
-//
-// export type OrderType = 'DELIVERY' | 'DINE_IN';
-//
-// // Existing API: Fetch menu
-// export const fetchCustomerMenu = async (orderType: OrderType) => {
-//   const response = await apiClient.get('/api/menus/customer/menu', {
-//     params: { orderType },
-//   });
-//   return response.data;
-// };
-//
-// // NEW: Create Menu API
-// export interface CreateMenuPayload {
-//   name: string;
-//   start_time: string; // "HH:mm"
-//   end_time: string;   // "HH:mm"
-// }
-//
-// export interface CreateMenuResponse {
-//   message: string;
-// }
-//
-// export const createMenu = async (payload: CreateMenuPayload): Promise<CreateMenuResponse> => {
-//   const response = await apiClient.post('/api/menus', payload);
-//   return response.data;
-// };
 
-// src/api/menu.api.ts
 import { apiClient } from './apiClient';
 
 export type OrderType = 'DELIVERY' | 'DINE_IN';
@@ -72,5 +43,11 @@ export interface UpdateMenuResponse {
 }
 export const updateMenu = async (id: string, payload: Omit<UpdateMenuPayload, 'id'>): Promise<UpdateMenuResponse> => {
   const response = await apiClient.put(`/api/menus/${id}`, payload);
+  return response.data;
+};
+
+// Delete Menu API
+export const deleteMenu = async (id: string): Promise<{ message: string }> => {
+  const response = await apiClient.delete(`/api/menus/${id}`);
   return response.data;
 };
