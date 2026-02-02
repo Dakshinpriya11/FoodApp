@@ -42,7 +42,7 @@ export default function OwnerDashboard() {
         </TouchableOpacity>
 
         {/* Staff */}
-        <TouchableOpacity style={styles.card} activeOpacity={0.85}>
+        <TouchableOpacity style={styles.card} activeOpacity={0.85} onPress={() => router.push('/(owner)/staff/add')}>
           <View style={styles.iconWrapper}>
             <Ionicons
               name="people-outline"
